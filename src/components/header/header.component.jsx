@@ -4,10 +4,11 @@ import {connect} from 'react-redux'
 import {ReactComponent as Logo} from '../../assets/crown.svg'
 import {auth} from '../../firebase/firebase.utils'
 import CartIcon from '../cart-icon/cart-icon.component'
+import CartDropdown from '../cart-dropdown/cart-dropdown.component'
 
 import './header.styles.scss'
 
-const Header = ({currentUser}) => (
+const Header = ({currentUser, cartHidden}) => (
   <div className='header'>
     <Link className='logo-container' to='/'>
       <Logo className='logo' />
@@ -23,11 +24,19 @@ const Header = ({currentUser}) => (
       }
       <CartIcon />
     </div>
+    {cartHidden ? null : <CartDropdown />}
   </div>
 )
 
-const mapStateToProps = state => ({
-  currentUser: state.user.currentUser
+// const mapStateToProps = state => ({
+//   currentUser: state.user.currentUser,
+//   cartHidden: state.cart.hidden
+// })
+// an alternate way to destructure the state variable above 
+// is as follows
+const mapStateToProps = ({user: {currentUser}, cart: {hidden}}) => ({
+  currentUser: currentUser,
+  cartHidden: hidden
 })
 
 export default connect(mapStateToProps)(Header)
