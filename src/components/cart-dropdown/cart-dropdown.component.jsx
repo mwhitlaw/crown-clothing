@@ -8,7 +8,7 @@ import {selectCartItems} from '../../redux/cart/cart.selectors'
 import {withRouter} from 'react-router-dom'
 import {toggleCartHidden} from '../../redux/cart/cart.actions'
 
- const CartDropdown = ({cartItems, history, toggleCartHidden}) => (
+ const CartDropdown = ({cartItems, history, dispatch}) => (
   <div className='cart-dropdown'>
     <div className='cart-items'>
       {
@@ -20,7 +20,13 @@ import {toggleCartHidden} from '../../redux/cart/cart.actions'
     </div>
     <AppButton onClick={() => {
       history.push('/checkout')
-      toggleCartHidden()
+
+      // here we use the "dispatch" function to 
+      // call the "toggleCartHidden" cart.action.
+      // "dispatch" is passed by default to connect if we don't
+      // define a "mapDispathToProps", so we can call the 
+      // cart "toggleCartHidden()" action directly with the "dispatch" function
+      dispatch(toggleCartHidden())
     }}>GO TO CHECKOUT</AppButton>
   </div>
  )
@@ -29,8 +35,10 @@ import {toggleCartHidden} from '../../redux/cart/cart.actions'
    cartItems : selectCartItems
  })
 
- const mapDispatchToProps = dispatch => ({
-   toggleCartHidden: () => dispatch(toggleCartHidden())
- })
+// if we DON'T define a mapDispatchToProps and pass it to connect,
+// "dispatch" will be connected by default, making it available in the props
+//  const mapDispatchToProps = dispatch => ({
+//    toggleCartHidden: () => dispatch(toggleCartHidden())
+//  })
 
- export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CartDropdown))
+ export default withRouter(connect(mapStateToProps)(CartDropdown))
