@@ -18,6 +18,16 @@ const cartReducer = (state = INITIAL_STATE, action) => {
         ...state,
         cartItems: mergeItem(state.cartItems, action.payload)
       }
+    case CartActionTypes.REMOVE_ITEM: 
+      return {
+        ...state,
+        cartItems: state.cartItems.filter(item => item.id !== action.payload.id)
+      }
+    case CartActionTypes.SET_ITEM_QUANTITY: 
+      return {
+        ...state,
+        cartItems: state.cartItems.map(i => i.id === action.payload.item.id ? {...i, quantity: action.payload.quantity} : i) 
+      }
     default: 
       return state
   }

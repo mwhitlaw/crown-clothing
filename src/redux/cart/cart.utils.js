@@ -4,3 +4,4 @@ export const mergeItem = (items, item) => {
     items.map(i => i.id === item.id ? {...i, quantity: i.quantity + 1} : i) :
     [...items, {...item, quantity: 1}]
 }
+
