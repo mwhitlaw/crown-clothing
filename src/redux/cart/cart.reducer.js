@@ -1,5 +1,5 @@
 import {CartActionTypes} from './cart.types'
-import {mergeItem} from './cart.utils'
+import {addItem, removeItem, removeItemFully, setItemQuantity} from './cart.utils'
 
 const INITIAL_STATE = {
   hidden: true,
@@ -16,17 +16,23 @@ const cartReducer = (state = INITIAL_STATE, action) => {
     case CartActionTypes.ADD_ITEM: 
       return {
         ...state,
-        cartItems: mergeItem(state.cartItems, action.payload)
+        cartItems: addItem(state.cartItems, action.payload)
       }
-    case CartActionTypes.REMOVE_ITEM: 
+      case CartActionTypes.REMOVE_ITEM: 
       return {
         ...state,
-        cartItems: state.cartItems.filter(item => item.id !== action.payload.id)
+        cartItems: removeItem(state.cartItems, action.payload)
+      }
+    case CartActionTypes.REMOVE_ITEM_FULLY: 
+      return {
+        ...state,
+        cartItems: removeItemFully(state.cartItems, action.payload)
       }
     case CartActionTypes.SET_ITEM_QUANTITY: 
+      const {item, quantity} = action.payload
       return {
         ...state,
-        cartItems: state.cartItems.map(i => i.id === action.payload.item.id ? {...i, quantity: action.payload.quantity} : i) 
+        cartItems: setItemQuantity(state.cartItems, item, quantity)
       }
     default: 
       return state

@@ -14,6 +14,11 @@ export const removeItem = item => ({
   payload: item
 })
 
+export const removeItemFully = item => ({
+  type: CartActionTypes.REMOVE_ITEM_FULLY,
+  payload: item
+})
+
 export const setItemQuantity = (item, quantity) => ({
   type: CartActionTypes.SET_ITEM_QUANTITY,
   payload: {
