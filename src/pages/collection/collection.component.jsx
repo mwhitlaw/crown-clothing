@@ -3,15 +3,16 @@ import './collection.styles.scss'
 
 import {connect} from 'react-redux'
 import {selectShopCollection} from '../../redux/shop/shop.selectors'
-// import CollectionItem from '../../components/collection-item/collection-item.component'
+import CollectionItem from '../../components/collection-item/collection-item.component'
 
 const CollectionPage = ({match, collection}) => {
-  console.log('CollectionPage')
-  console.log(match)
-  console.log(collection)
+  const {title, items} = collection
   return (
     <div className='collection-page'>
-      <h2>Collection Page</h2>
+      <h2 className='title'>{title}</h2>
+      <div className='items'>
+        {items.map(item => <CollectionItem key={item.id} item={item} />)}  
+      </div>
     </div>
   )
 }
@@ -19,8 +20,8 @@ const CollectionPage = ({match, collection}) => {
 // note how this one uses a selector that takes a parameter 
 // and how the value for that parameter comes from "ownProps", which is the 
 // the second parameter passed to the "mapStateToProps" function
-// ... also note the how the parameterized selector is curried and we pass the 
-// "state" to the curried function
+// ... also note how the parameterized selector is curried and we pass the 
+// "state" to the curried function returned by our selector that takes a parameter
 const mapStateToProps = (state, ownProps) => ({
   collection: selectShopCollection(ownProps.match.params.collectionId)(state)
 })
