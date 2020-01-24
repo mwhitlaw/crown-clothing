@@ -3,7 +3,11 @@ import FormInput from '../form-input/form-input.component'
 import AppButton from '../app-button/app-button.component'
 import {auth, signInWithGoogle} from '../../firebase/firebase.utils'
 
-import './sign-in.styles.scss'
+import {
+  StyledSignIn,
+  StyledTitle,
+  StyledButtons
+} from './sign-in.styles'
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -38,8 +42,8 @@ class SignIn extends React.Component {
 
   render() {
     return (
-      <div className='sign-in'>
-        <h2>I already have an account</h2>
+      <StyledSignIn>
+        <StyledTitle>I already have an account</StyledTitle>
         <span>Sign in with your email and password</span>
         <form onSubmit={this.handleSubmit}>
           <FormInput 
@@ -60,12 +64,12 @@ class SignIn extends React.Component {
             required 
           />
           
-          <div className='buttons'>
+          <StyledButtons>
             <AppButton type='submit'>Sign In</AppButton>
             <AppButton isGoogleSignIn onClick={signInWithGoogle}>Sign in with Google</AppButton>
-          </div>
+          </StyledButtons>
         </form>
-      </div>
+      </StyledSignIn>
     )
   }
 }
