@@ -8,7 +8,7 @@ export const StyledCollectionPreview = styled.div`
 
 export const StyledTitle = styled.h2`
   font-size: 28px;
-  margin-bottom: 25px;
+  margin-bottom: 7px;
   cursor: pointer;
 `
 export const StyledPreview = styled.div`

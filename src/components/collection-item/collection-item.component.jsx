@@ -3,7 +3,7 @@ import {
   StyledCollectionItem,
   StyledBackgroundImage,
   StyledAddButton,
-  StyledCollectionFooter,
+  StyledCollectionItemFooter,
   StyledName,
   StyledPrice
 } from './collection-item.styles'
@@ -12,14 +12,14 @@ import {addItem} from '../../redux/cart/cart.actions'
 
 
 const CollectionItem = ({item, addItem}) => {
-  const {name, price} = item
+  const {name, price, imageUrl} = item
   return (
     <StyledCollectionItem>
-      <StyledBackgroundImage className='image'/>
-      <StyledCollectionFooter>
+      <StyledBackgroundImage className='image' imageUrl={imageUrl}/>
+      <StyledCollectionItemFooter>
         <StyledName>{name}</StyledName>
         <StyledPrice>${price}</StyledPrice>
-      </StyledCollectionFooter>
+      </StyledCollectionItemFooter>
       <StyledAddButton onClick={() => addItem(item)} inverted>Add to Cart</StyledAddButton>
     </StyledCollectionItem>
   )

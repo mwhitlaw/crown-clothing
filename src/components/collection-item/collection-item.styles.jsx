@@ -38,7 +38,7 @@ export const StyledBackgroundImage = styled.div`
   background-image:  ${({imageUrl}) => `url(${imageUrl})`};
 `
 
-export const StyledCollectionFooter = styled.div`
+export const StyledCollectionItemFooter = styled.div`
   width: 100%;
   height: 5%;
   display: flex;
