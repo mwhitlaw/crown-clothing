@@ -46,4 +46,19 @@ authProvider.setCustomParameters({prompt: 'select_account'})
 
 export const signInWithGoogle = () => auth.signInWithPopup(authProvider)
 
+// example of adding a collection to firebase.firestore, then adding
+// documents to that collection
+export const addCollectionAndDocuments = async (collectionKey, docsToAdd) => {
+  const collectionRef = firestore.collection(collectionKey)
+
+  const batch = firestore.batch()
+
+  docsToAdd.forEach(doc => {
+    // this creates a new doc with a generated, random id
+    const newDocRef = collectionRef.doc()
+    batch.set(newDocRef, doc)
+  })
+
+  return await batch.commit()
+}
 export default firebase
