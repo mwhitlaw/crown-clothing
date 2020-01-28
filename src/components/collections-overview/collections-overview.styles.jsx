@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const StyledCollectionOverview = styled.div`
+export const StyledCollectionsOverview = styled.div`
   display: flex;
   flex-direction: column;
 `
