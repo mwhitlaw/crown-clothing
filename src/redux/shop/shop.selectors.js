@@ -19,5 +19,20 @@ export const selectShopCollection = collectionKey => createSelector(
   shopCollections => shopCollections ? shopCollections[collectionKey] : null
 )
 
+export const selectCollectionsIsFetching = createSelector(
+  [selectShop],
+  shop => shop.isFetching
+)
+
+export const selectCollectionsFetchingErrorMessage = createSelector(
+  [selectShop],
+  shop => shop.errorMessage
+)
+
+export const selectCollectionsIsLoaded = createSelector(
+  [selectShop],
+  shop => !!shop.collections
+)
+
 
 

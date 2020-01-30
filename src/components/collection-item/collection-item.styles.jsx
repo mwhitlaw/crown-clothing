@@ -48,7 +48,6 @@ export const StyledCollectionItemFooter = styled.div`
 
 export const StyledName = styled.span`
   width: 90%;
-  margin-top: 15px;
 `
 
 export const StyledPrice = styled.span`
