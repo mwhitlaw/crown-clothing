@@ -22,11 +22,19 @@ class ShopPage extends React.Component {
     const {updateCollections} = this.props
     const collectionsRef = firestore.collection('collections')
 
-    this.unsubscribeFromCollectionsSnap = collectionsRef.onSnapshot(async collectionsSnap => {
+    // this is getting the data using the promise patter
+    collectionsRef.get().then(collectionsSnap => {
       const collections = convertCollectionsSnapToMap(collectionsSnap)
       updateCollections(collections)
       this.setState({loading: false})
     })
+
+    // this is getting the data using the Observer Pattern
+    // this.unsubscribeFromCollectionsSnap = collectionsRef.onSnapshot(async collectionsSnap => {
+    //   const collections = convertCollectionsSnapToMap(collectionsSnap)
+    //   updateCollections(collections)
+    //   this.setState({loading: false})
+    // })
   }
 
   componentWillUnmount() {
