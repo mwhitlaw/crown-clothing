@@ -61,4 +61,36 @@ export const addCollectionAndDocuments = async (collectionKey, docsToAdd) => {
 
   return await batch.commit()
 }
+
+export const convertCollectionsSnapToMap = (collectionsSnap) => {
+  const ret = collectionsSnap.docs.map(doc => {
+    const {title, items} = doc.data()
+
+    return {
+      id: doc.id,
+      routeName: encodeURI(title.toLowerCase()),
+      title,
+      items
+    }
+  })
+  return ret.reduce((acc, collection) => {
+    acc[collection.title.toLowerCase()] = collection
+    return acc
+  }, {})
+}
+
+export const convertCollectionsSnapToArray = (collectionsSnap) => {
+  const ret = collectionsSnap.docs.map(doc => {
+    const {title, items} = doc.data()
+
+    return {
+      id: doc.id,
+      routeName: encodeURI(title.toLowerCase()),
+      title,
+      items
+    }
+  })
+  return ret
+}
+
 export default firebase

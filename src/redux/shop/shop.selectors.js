@@ -7,9 +7,16 @@ export const selectShopCollections = createSelector(
   shop => shop.collections
 )
 
-export const selectShopCollection = routeName => createSelector(
+export const selectShopCollectionsForPreview = createSelector(
   [selectShopCollections],
-  shopCollections => shopCollections.find(collection => collection.routeName.toLowerCase() === routeName.toLowerCase())
+  shopCollections => shopCollections ? 
+    Object.keys(shopCollections).map(key => shopCollections[key]) :
+    []
+)
+
+export const selectShopCollection = collectionKey => createSelector(
+  [selectShopCollections],
+  shopCollections => shopCollections ? shopCollections[collectionKey] : null
 )
 
 
