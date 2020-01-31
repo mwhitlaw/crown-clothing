@@ -16,9 +16,9 @@ export const createUserProfile = async (userAuth, extraData) => {
   if (!userAuth) return
 
   const userRef = firestore.doc(`/users/${userAuth.uid}`)
-  const snapShot = await userRef.get()
+  const userSnap = await userRef.get()
 
-  if (!snapShot.exists) {
+  if (!userSnap.exists) {
     const {displayName, email} = userAuth
     const createdAt = new Date()
     try {
@@ -45,5 +45,52 @@ const authProvider = new firebase.auth.GoogleAuthProvider()
 authProvider.setCustomParameters({prompt: 'select_account'})
 
 export const signInWithGoogle = () => auth.signInWithPopup(authProvider)
+
+// example of adding a collection to firebase.firestore, then adding
+// documents to that collection
+export const addCollectionAndDocuments = async (collectionKey, docsToAdd) => {
+  const collectionRef = firestore.collection(collectionKey)
+
+  const batch = firestore.batch()
+
+  docsToAdd.forEach(doc => {
+    // this creates a new doc with a generated, random id
+    const newDocRef = collectionRef.doc()
+    batch.set(newDocRef, doc)
+  })
+
+  return await batch.commit()
+}
+
+export const convertCollectionsSnapToMap = (collectionsSnap) => {
+  const ret = collectionsSnap.docs.map(doc => {
+    const {title, items} = doc.data()
+
+    return {
+      id: doc.id,
+      routeName: encodeURI(title.toLowerCase()),
+      title,
+      items
+    }
+  })
+  return ret.reduce((acc, collection) => {
+    acc[collection.title.toLowerCase()] = collection
+    return acc
+  }, {})
+}
+
+export const convertCollectionsSnapToArray = (collectionsSnap) => {
+  const ret = collectionsSnap.docs.map(doc => {
+    const {title, items} = doc.data()
+
+    return {
+      id: doc.id,
+      routeName: encodeURI(title.toLowerCase()),
+      title,
+      items
+    }
+  })
+  return ret
+}
 
 export default firebase

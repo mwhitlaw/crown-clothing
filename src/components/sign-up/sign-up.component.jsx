@@ -3,7 +3,10 @@ import FormInput from '../form-input/form-input.component'
 import AppButton from '../app-button/app-button.component'
 import {auth, createUserProfile} from '../../firebase/firebase.utils'
 
-import './sign-up.styles.scss'
+import {
+  StyledSignUp,
+  StyledTitle
+} from './sign-up.styles'
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -47,8 +50,8 @@ class SignUp extends React.Component {
   render() {
     const {displayName, email, password, passwordConfirm} = this.state
     return (
-      <div className='sign-up'>
-        <h2 className='title'>I do not have an account</h2>
+      <StyledSignUp>
+        <StyledTitle>I do not have an account</StyledTitle>
         <span>Sign up with your email and password</span>
         <form onSubmit={this.handleSubmit}>
           <FormInput 
@@ -85,7 +88,7 @@ class SignUp extends React.Component {
           />
           <AppButton type='submit'>Sign Up</AppButton>
         </form>
-      </div>
+      </StyledSignUp>
     )
   }
 }

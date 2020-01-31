@@ -7,9 +7,31 @@ export const selectShopCollections = createSelector(
   shop => shop.collections
 )
 
-export const selectShopCollection = routeName => createSelector(
+export const selectShopCollectionsForPreview = createSelector(
   [selectShopCollections],
-  shopCollections => shopCollections.find(collection => collection.routeName.toLowerCase() === routeName.toLowerCase())
+  shopCollections => shopCollections ? 
+    Object.keys(shopCollections).map(key => shopCollections[key]) :
+    []
+)
+
+export const selectShopCollection = collectionKey => createSelector(
+  [selectShopCollections],
+  shopCollections => shopCollections ? shopCollections[collectionKey] : null
+)
+
+export const selectCollectionsIsFetching = createSelector(
+  [selectShop],
+  shop => shop.isFetching
+)
+
+export const selectCollectionsFetchingErrorMessage = createSelector(
+  [selectShop],
+  shop => shop.errorMessage
+)
+
+export const selectCollectionsIsLoaded = createSelector(
+  [selectShop],
+  shop => !!shop.collections
 )
 
 

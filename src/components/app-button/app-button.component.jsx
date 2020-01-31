@@ -1,11 +1,11 @@
 import React from 'react'
 
-import './app-button.styles.scss'
+import {AppButtonContainer} from './app-button.styles'
 
-const AppButton = ({children, isGoogleSignIn, inverted, ...otherProps}) => (
-  <button className={`${isGoogleSignIn ? 'google-sign-in' : ''} ${inverted ? 'inverted' : ''} app-button`} {...otherProps}>
-    {children}
-  </button>
+const AppButton = props => (
+  <AppButtonContainer {...props}>
+    {props.children}
+  </AppButtonContainer>
 )
 
 export default AppButton

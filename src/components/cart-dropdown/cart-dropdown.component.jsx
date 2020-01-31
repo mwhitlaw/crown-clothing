@@ -1,24 +1,28 @@
 import React from 'react'
-import AppButton from '../app-button/app-button.component'
-import './cart-dropdown.styles.scss'
 import {connect} from 'react-redux'
 import CartItem from '../cart-item/cart-item.component'
 import {createStructuredSelector} from 'reselect'
 import {selectCartItems} from '../../redux/cart/cart.selectors'
 import {withRouter} from 'react-router-dom'
 import {toggleCartHidden} from '../../redux/cart/cart.actions'
+import {
+  CartDropdownContainer,
+  CartItemsContainer,
+  EmptyMessageContainer,
+  ButtonContainer
+} from './cart-dropdown.styles'
 
 const CartDropdown = ({cartItems, history, dispatch}) => (
-  <div className='cart-dropdown'>
-    <div className='cart-items'>
+  <CartDropdownContainer>
+    <CartItemsContainer>
       {
         cartItems.length ?
         cartItems.map(cartItem => (<CartItem key={cartItem.id} item={cartItem} />))
         :
-        <span className='empty-message'>Your cart is empty</span>
+        <EmptyMessageContainer>Your cart is empty</EmptyMessageContainer>
       }
-    </div>
-    <AppButton onClick={() => {
+    </CartItemsContainer>
+    <ButtonContainer onClick={() => {
       history.push('/checkout')
 
       // here we use the "dispatch" function to 
@@ -27,8 +31,8 @@ const CartDropdown = ({cartItems, history, dispatch}) => (
       // define a "mapDispathToProps", so we can call the 
       // cart "toggleCartHidden()" action directly with the "dispatch" function
       dispatch(toggleCartHidden())
-    }}>GO TO CHECKOUT</AppButton>
-  </div>
+    }}>GO TO CHECKOUT</ButtonContainer>
+  </CartDropdownContainer>
  )
 
  const mapStateToProps = createStructuredSelector({
