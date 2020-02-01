@@ -1,43 +1,17 @@
 import React from 'react'
 import {Route} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {fetchCollectionsStartAsync} from '../../redux/shop/shop.actions'
+import {fetchCollectionsStart} from '../../redux/shop/shop.actions'
 import CollectionsOverviewContainer from '../../components/collections-overview/collections-overview.container'
 import CollectionPageContainer from '../collection/collection.container'
 
 
 class ShopPage extends React.Component {
 
-  // state = {
-  //   loading: true
-  // }
-
-  // unsubscribeFromCollectionsSnap = null
-
   componentDidMount() {
-    const {fetchCollectionsStartAsync} = this.props
-    fetchCollectionsStartAsync()
-    // const {updateCollections} = this.props
-    // const collectionsRef = firestore.collection('collections')
-
-    // // this is getting the data using the promise patter
-    // collectionsRef.get().then(collectionsSnap => {
-    //   const collections = convertCollectionsSnapToMap(collectionsSnap)
-    //   updateCollections(collections)
-    //   this.setState({loading: false})
-    // })
-
-    // this is getting the data using the Observer Pattern
-    // this.unsubscribeFromCollectionsSnap = collectionsRef.onSnapshot(async collectionsSnap => {
-    //   const collections = convertCollectionsSnapToMap(collectionsSnap)
-    //   updateCollections(collections)
-    //   this.setState({loading: false})
-    // })
+    const {fetchCollectionsStart} = this.props
+    fetchCollectionsStart()
   }
-
-  // componentWillUnmount() {
-  //   this.unsubscribeFromCollectionsSnap()
-  // }
 
   render() {
     const {match} = this.props
@@ -51,7 +25,7 @@ class ShopPage extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync())
+  fetchCollectionsStart: () => dispatch(fetchCollectionsStart())
 })
 
 export default connect(null, mapDispatchToProps)(ShopPage)
