@@ -22,7 +22,7 @@ class App extends React.Component {
 
   componentDidMount() {
 
-    // get the setCurrentUser from the props, 
+    // get the setCurrentUser function from the props, 
     // because it was mapped to props in mapDispatchToProps
     const {setCurrentUser} = this.props
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
