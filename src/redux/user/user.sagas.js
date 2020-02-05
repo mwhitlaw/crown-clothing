@@ -13,13 +13,15 @@ import {
   signInSuccess, 
   signInFailure,
   signOutSuccess,
-  signOutFailure
+  signOutFailure,
+  signUpSuccess,
+  signUpFailure
 } from './user.actions'
 
 
-export function* getUserSnapFromUserAuth(userAuth) {
+export function* getUserSnapFromUserAuth(userAuth, additionalData) {
   try {
-    const userRef = yield call(createUserProfile, userAuth)
+    const userRef = yield call(createUserProfile, userAuth, additionalData)
     const userSnap = yield userRef.get()
     yield put(signInSuccess({id: userSnap.id, ...userSnap.data()}))
   } catch (error) {
@@ -27,10 +29,23 @@ export function* getUserSnapFromUserAuth(userAuth) {
   }
 }
 
+export function* signUp({payload: {email, password, displayName}}) {
+  try {
+    // not the call to auth.createUserWithEmailAndPassword returns an
+    // object with the property 'user', but I want to be called 'userAuth'
+    // so this assignment, {user: userAuth}, effectively renames 
+    // the returned 'user' to 'userAuth'
+    const {user: userAuth} = yield auth.createUserWithEmailAndPassword(email, password)
+    yield put(signUpSuccess({userAuth, additionalData: {displayName}}))
+  } catch (error) {
+    yield put(signUpFailure(error))
+  }
+}
+
 export function* signInWithGoogle() {
   try {
-    const {user} = yield auth.signInWithPopup(googleAuthProvider)
-    yield getUserSnapFromUserAuth(user)
+    const {user: userAuth} = yield auth.signInWithPopup(googleAuthProvider)
+    yield getUserSnapFromUserAuth(userAuth)
   } catch (error) {
     yield put(signInFailure(error))
   }
@@ -41,13 +56,17 @@ export function* signInWithGoogle() {
 // action object, with the type and payload, from the listened to action
 export function* signInWithEmail({payload: {email, password}}) {
     try {
-      const {user} = yield auth.signInWithEmailAndPassword(email, password)
-      yield getUserSnapFromUserAuth(user)
+      const {user: userAuth} = yield auth.signInWithEmailAndPassword(email, password)
+      yield getUserSnapFromUserAuth(userAuth)
     } catch (error) {
       yield put(signInFailure(error))
     }
-
 }
+
+export function* signInAfterSignUp({payload: {userAuth, additionalData}}) {
+  yield getUserSnapFromUserAuth(userAuth, additionalData)
+}
+
 
 export function* isUserAuthenticated() {
   try {
@@ -87,11 +106,21 @@ export function* onSignOutStart() {
   yield takeLatest(UserActionTypes.SIGNOUT_START, signOut)
 }
 
+export function* onSignUpStart() {
+  yield takeLatest(UserActionTypes.SIGNUP_START, signUp)
+}
+
+export function* onSignUpSuccess() {
+  yield takeLatest(UserActionTypes.SIGNUP_SUCCESS, signInAfterSignUp)
+}
+
 export function* userSagas() {
   yield all([
     call(onGoogleSignInStart),
     call(onEmailSignInStart),
     call(onCheckUserSession),
-    call(onSignOutStart)
+    call(onSignOutStart),
+    call(onSignUpStart),
+    call(onSignUpSuccess)
   ])
 }
