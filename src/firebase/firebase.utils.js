@@ -41,10 +41,10 @@ firebase.initializeApp(config)
 export const auth = firebase.auth()
 export const firestore = firebase.firestore()
 
-const authProvider = new firebase.auth.GoogleAuthProvider()
-authProvider.setCustomParameters({prompt: 'select_account'})
+export const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
+googleAuthProvider.setCustomParameters({prompt: 'select_account'})
 
-export const signInWithGoogle = () => auth.signInWithPopup(authProvider)
+export const signInWithGoogle = () => auth.signInWithPopup(googleAuthProvider)
 
 // example of adding a collection to firebase.firestore, then adding
 // documents to that collection
@@ -81,6 +81,15 @@ export const convertCollectionsSnapToArray = (collectionsSnap) => {
     }
   })
   return ret
+}
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged(userAuth => {
+      unsubscribe()
+      resolve(userAuth)
+    }, reject)
+  })
 }
 
 export default firebase
