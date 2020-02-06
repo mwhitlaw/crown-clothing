@@ -4,8 +4,6 @@ import {firestore, convertCollectionsSnapToMap} from '../../firebase/firebase.ut
 import {fetchCollectionsSuccess, fetchCollectionsFailure} from './shop.actions'
 
 function* fetchCollectionsAsync() {
-  yield console.log('At first yield in fetchCollectionsAsync')
-
   try {
     const collectionsRef = firestore.collection('collections')
     const collectionsSnap = yield collectionsRef.get()
