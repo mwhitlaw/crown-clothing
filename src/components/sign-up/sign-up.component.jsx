@@ -1,96 +1,83 @@
-import React from 'react'
+import React, {useState} from 'react'
+import {connect} from 'react-redux'
 import FormInput from '../form-input/form-input.component'
 import AppButton from '../app-button/app-button.component'
-import {auth, createUserProfile} from '../../firebase/firebase.utils'
+import {signUpStart} from '../../redux/user/user.actions'
+
 
 import {
   StyledSignUp,
   StyledTitle
 } from './sign-up.styles'
 
-class SignUp extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      displayName: '',
-      email: '',
-      password: '',
-      passwordConfirm: ''
-    }
-  }
+const SignUp = ({signUpStart}) => {
 
-  handleSubmit = async event => {
+  const [userData, setUserData] = useState({displayName: '', email: '', password: '', passwordConfirm: ''})
+  const {displayName, email, password, passwordConfirm} = userData
+
+
+  const handleSubmit = async event => {
     event.preventDefault()
-    const {displayName, email, password, passwordConfirm} = this.state
 
     if (password !== passwordConfirm) {
       alert("Password doesn't match")
       return
     }
 
-    try {
-      const {user} = await auth.createUserWithEmailAndPassword(email, password)
-      await createUserProfile(user, {displayName})
-      this.setState({
-        displayName: '',
-        email: '',
-        password: '',
-        passwordConfirm: ''  
-      })
-    } catch (error) {
-      console.log(error)
-    }
+    signUpStart(email, password, displayName)
+
   }
 
-  handleChange = event => {
+  const handleChange = event => {
     const {value, name} = event.target
-    this.setState({[name]: value})
+    setUserData({...userData, [name]: value})
   }
 
-  render() {
-    const {displayName, email, password, passwordConfirm} = this.state
-    return (
-      <StyledSignUp>
-        <StyledTitle>I do not have an account</StyledTitle>
-        <span>Sign up with your email and password</span>
-        <form onSubmit={this.handleSubmit}>
-          <FormInput 
-            handleChange={this.handleChange} 
-            label='Display Name' 
-            type='text' 
-            name='displayName' 
-            value={displayName} 
-            required 
-          />
-          <FormInput 
-            handleChange={this.handleChange} 
-            label='Email' 
-            type='email' 
-            name='email' 
-            value={email} 
-            required 
-          />
-          <FormInput 
-            handleChange={this.handleChange} 
-            label='Password' 
-            type='password' 
-            name='password' 
-            value={password} 
-            required 
-          />
-          <FormInput 
-            handleChange={this.handleChange} 
-            label='Confirm Password' 
-            type='password' 
-            name='passwordConfirm' 
-            value={passwordConfirm} 
-            required 
-          />
-          <AppButton type='submit'>Sign Up</AppButton>
-        </form>
-      </StyledSignUp>
-    )
-  }
+  return (
+    <StyledSignUp>
+      <StyledTitle>I do not have an account</StyledTitle>
+      <span>Sign up with your email and password</span>
+      <form onSubmit={handleSubmit}>
+        <FormInput 
+          handleChange={handleChange} 
+          label='Display Name' 
+          type='text' 
+          name='displayName' 
+          value={displayName} 
+          required 
+        />
+        <FormInput 
+          handleChange={handleChange} 
+          label='Email' 
+          type='email' 
+          name='email' 
+          value={email} 
+          required 
+        />
+        <FormInput 
+          handleChange={handleChange} 
+          label='Password' 
+          type='password' 
+          name='password' 
+          value={password} 
+          required 
+        />
+        <FormInput 
+          handleChange={handleChange} 
+          label='Confirm Password' 
+          type='password' 
+          name='passwordConfirm' 
+          value={passwordConfirm} 
+          required 
+        />
+        <AppButton type='submit'>Sign Up</AppButton>
+      </form>
+    </StyledSignUp>
+  )
 }
 
-export default SignUp
+const mapDispatchToProps = dispatch => ({
+  signUpStart: (email, password, displayName) => dispatch(signUpStart({email, password, displayName})) 
+})
+
+export default connect(null, mapDispatchToProps)(SignUp)

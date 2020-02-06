@@ -1,77 +1,66 @@
-import React from 'react'
+import React, {useState} from 'react'
+import {connect} from 'react-redux'
 import FormInput from '../form-input/form-input.component'
 import AppButton from '../app-button/app-button.component'
-import {auth, signInWithGoogle} from '../../firebase/firebase.utils'
-
+import {googleSignInStart, emailSignInStart} from '../../redux/user/user.actions'
 import {
   StyledSignIn,
   StyledTitle,
   StyledButtons
 } from './sign-in.styles'
 
-class SignIn extends React.Component {
-  constructor(props) {
-    super(props)
+const SignIn = ({emailSignInStart, googleSignInStart}) => {
 
-    this.state = {
-      email: '',
-      password: ''
-    }
-  }
+  const [userData, setUserData] = useState({email: '', password: ''})
 
-  handleSubmit = async event => {
+  const {email, password} = userData
+
+  const handleSubmit = async event => {
     event.preventDefault()
+    emailSignInStart(email, password)
 
-    const {email, password} = this.state
-
-    try {
-      await auth.signInWithEmailAndPassword(email, password)
-      this.setState({
-        email: '',
-        password: ''
-      })
-    } catch (error) {
-      console.log(error)
-    }
   }
 
-  handleChange = event => {
+  const handleChange = event => {
     const {value, name} = event.target
-    this.setState({[name]: value})
+    setUserData({...userData, [name]: value})
   }
 
-  render() {
-    return (
-      <StyledSignIn>
-        <StyledTitle>I already have an account</StyledTitle>
-        <span>Sign in with your email and password</span>
-        <form onSubmit={this.handleSubmit}>
-          <FormInput 
-            handleChange={this.handleChange} 
-            label='Email' 
-            type='email' 
-            name='email' 
-            value={this.state.email} 
-            required 
-          />
-          
-          <FormInput 
-            handleChange={this.handleChange}
-            label='password'
-            type='password' 
-            name='password' 
-            value={this.state.password} 
-            required 
-          />
-          
-          <StyledButtons>
-            <AppButton type='submit'>Sign In</AppButton>
-            <AppButton isGoogleSignIn onClick={signInWithGoogle}>Sign in with Google</AppButton>
-          </StyledButtons>
-        </form>
-      </StyledSignIn>
-    )
-  }
+  return (
+    <StyledSignIn>
+      <StyledTitle>I already have an account</StyledTitle>
+      <span>Sign in with your email and password</span>
+      <form onSubmit={handleSubmit}>
+        <FormInput 
+          handleChange={handleChange} 
+          label='Email' 
+          type='email' 
+          name='email' 
+          value={email} 
+          required 
+        />
+        
+        <FormInput 
+          handleChange={handleChange}
+          label='password'
+          type='password' 
+          name='password' 
+          value={password} 
+          required 
+        />
+        
+        <StyledButtons>
+          <AppButton type='submit'>Sign In</AppButton>
+          <AppButton type='button' isGoogleSignIn onClick={googleSignInStart}>Sign in with Google</AppButton>
+        </StyledButtons>
+      </form>
+    </StyledSignIn>
+  )
 }
 
-export default SignIn
+const mapDispatchToProps = dispatch => ({
+  googleSignInStart: () => dispatch(googleSignInStart()),
+  emailSignInStart: (email, password) => dispatch(emailSignInStart({email, password}))
+})
+
+export default connect(null, mapDispatchToProps)(SignIn)

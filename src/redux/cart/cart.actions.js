@@ -26,3 +26,7 @@ export const setItemQuantity = (item, quantity) => ({
     quantity
   }
 })
+
+export const clearCart = () => ({
+  type: CartActionTypes.CLEAR_CART
+})
