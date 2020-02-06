@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import {Route, Switch, Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
@@ -14,41 +14,24 @@ import {checkUserSession} from './redux/user/user.actions'
 // this gets used in mapDispatchToProps
 // import {setCurrentUser} from './redux/user/user.actions'
 
-class App extends React.Component {
+const App = ({currentUser, checkUserSession}) => {
 
-  // this is assigned when calling auth.onAuthStateChanged
-  // and invoked in componentWillUnMount
-  // unsubscribeFromAuth = null
-
-  componentDidMount() {
-    const {checkUserSession} = this.props
+  useEffect(() => {
     checkUserSession()
-  }
+  }, [checkUserSession])
 
-  componentWillUnmount() {
-    // this.unsubscribeFromAuth()
-  }
-
-  render() {
-    const {currentUser} = this.props
-    return (
-      <div>
-        <Header />
-        <Switch>
-          <Route exact path='/' component={HomePage} />
-          <Route path='/shop' component={ShopPage} />
-          <Route exact path='/checkout' component={CheckoutPage} />
-          <Route exact path='/signin' render={() => currentUser ? <Redirect to='/' /> : <SignInAndSignUpPage />} />
-        </Switch>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <Header />
+      <Switch>
+        <Route exact path='/' component={HomePage} />
+        <Route path='/shop' component={ShopPage} />
+        <Route exact path='/checkout' component={CheckoutPage} />
+        <Route exact path='/signin' render={() => currentUser ? <Redirect to='/' /> : <SignInAndSignUpPage />} />
+      </Switch>
+    </div>
+  )
 }
-
-// for setting values through props
-// const mapDispatchToProps = dispatch => ({
-//   setCurrentUser: user => dispatch(setCurrentUser(user))
-// })
 
 const mapDispatchToProps = dispatch => ({
   checkUserSession: () => dispatch(checkUserSession())
